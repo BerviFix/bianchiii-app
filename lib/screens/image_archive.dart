@@ -7,21 +7,21 @@ class ImageArchive extends StatelessWidget {
 
   // Lista statica dei percorsi delle immagini in assets/photos
   static const List<String> _assetImages = [
-    'photos/img-1.jpg',
-    'photos/img-2.jpg',
-    'photos/img-3.jpg',
-    'photos/img-4.jpg',
-    'photos/img-5.jpg',
-    'photos/img-6.jpg',
-    'photos/img-7.jpg',
-    'photos/img-8.jpg',
-    'photos/img-9.jpg',
-    'photos/img-10.jpg',
-    'photos/img-11.jpg',
-    'photos/img-12.jpg',
-    'photos/img-13.jpg',
-    'photos/img-14.jpg',
-    'photos/img-15.jpg',
+    'assets/photos/img-1.jpg',
+    'assets/photos/img-2.jpg',
+    'assets/photos/img-3.jpg',
+    'assets/photos/img-4.jpg',
+    'assets/photos/img-5.jpg',
+    'assets/photos/img-6.jpg',
+    'assets/photos/img-7.jpg',
+    'assets/photos/img-8.jpg',
+    'assets/photos/img-9.jpg',
+    'assets/photos/img-10.jpg',
+    'assets/photos/img-11.jpg',
+    'assets/photos/img-12.jpg',
+    'assets/photos/img-13.jpg',
+    'assets/photos/img-14.jpg',
+    'assets/photos/img-15.jpg',
   ];
 
   @override

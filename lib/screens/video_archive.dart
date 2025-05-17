@@ -6,13 +6,13 @@ class VideoArchive extends StatelessWidget {
 
   // Lista statica dei percorsi dei video in assets/video
   static const List<String> _assetVideos = [
-    'video/video-1.mp4',
-    'video/video-2.mp4',
-    'video/video-3.mp4',
-    'video/video-4.mp4',
-    'video/video-5.mp4',
-    'video/video-6.mp4',
-    'video/video-7.mp4',
+    'assets/video/video-1.mp4',
+    'assets/video/video-2.mp4',
+    'assets/video/video-3.mp4',
+    'assets/video/video-4.mp4',
+    'assets/video/video-5.mp4',
+    'assets/video/video-6.mp4',
+    'assets/video/video-7.mp4',
   ];
 
   @override
