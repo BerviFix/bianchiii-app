@@ -3,11 +3,11 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 
-const RESOURCES = {"flutter_bootstrap.js": "821e79a92f84e4619001d62ef404a77e",
+const RESOURCES = {"flutter_bootstrap.js": "04bbba4d2842839d48b22644197c8266",
 "version.json": "88fce18534fb26179e26fa9b3791fd15",
 "index.html": "b0de514a1c5ff2b8761fa014577999ac",
 "/": "b0de514a1c5ff2b8761fa014577999ac",
-"main.dart.js": "a28a74221bcd92bed8057abc12661a51",
+"main.dart.js": "2a00059a9381d689636c1b271136816d",
 "flutter.js": "76f08d47ff9f5715220992f993002504",
 "favicon.png": "fc00d21321f1291511861df49f80b816",
 "icons/Icon-192.png": "ac9a721a12bbc803b44f645561ecb1e1",
@@ -30,7 +30,7 @@ const RESOURCES = {"flutter_bootstrap.js": "821e79a92f84e4619001d62ef404a77e",
 "assets/assets/video/video-1.mp4": "c6e096f793d5bd93ce8cc919bc4758d2",
 "assets/assets/video/video-3.mp4": "1e80e64b4f34505c0ccaa1f0905a23e0",
 "assets/assets/video/video-2.mp4": "6defb193642262397661941eeec0d0bc",
-"assets/assets/bianchiii-logo.png": "7a67e83c3cc8959c92c2dde7f0301ae9",
+"assets/assets/bianchiii-logo.png": "934d0fa534c77d56de38c8c933a9c4d8",
 "assets/assets/photos/img-3.jpg": "ba142867034e1e15a58d1f948d2b3282",
 "assets/assets/photos/img-2.jpg": "9012cc97d1e3e6309610adc5a95c9ba4",
 "assets/assets/photos/img-1.jpg": "5ca42cfd154f1ade6587619091c0a24c",

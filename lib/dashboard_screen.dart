@@ -45,7 +45,7 @@ class DashboardScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 16.0),
           child: Image.asset(
             'assets/bianchiii-logo.png',
-            height: 50,
+            height: 70,
           ),
         ),
         centerTitle: true, // Opzionale: centra il logo
@@ -55,10 +55,10 @@ class DashboardScreen extends StatelessWidget {
           final isWide = constraints.maxWidth > 600;
           return GridView.count(
             padding: const EdgeInsets.all(16),
-            crossAxisCount: isWide ? 3 : 1,
+            crossAxisCount: constraints.maxWidth > 900 ? 3 : (constraints.maxWidth > 450 ? 2 : 1),
             mainAxisSpacing: 16,
             crossAxisSpacing: 16,
-            childAspectRatio: isWide ? 1.4 : 3.6,
+            childAspectRatio: isWide ? 1.4 : 1.0,
             children: categories.map((c) => _DashboardCard(category: c)).toList(),
           );
         },

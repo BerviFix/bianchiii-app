@@ -41887,7 +41887,7 @@ return b instanceof A.Hf&&this.a===b.a},
 gu(a){return B.f.gu(this.a)}}
 A.IQ.prototype={
 L(a){var s=null,r=A.a([new A.o5("Audio",B.Ss,B.X6,new A.a17(a)),new A.o5("Immagini",B.Sr,B.X7,new A.a18(a)),new A.o5("Video",B.qv,B.X5,new A.a19(a))],t.p5)
-return A.BN(A.Z6(!0,new A.hg(B.q9,A.avV("assets/bianchiii-logo.png",s,s,50),s),80),s,new A.um(new A.a1a(r),s))}}
+return A.BN(A.Z6(!0,new A.hg(B.q9,A.avV("assets/bianchiii-logo.png",s,s,70),s),80),s,new A.um(new A.a1a(r),s))}}
 A.a17.prototype={
 $0(){var s=A.Ak(new A.a16(),null,t.z)
 return A.lv(this.a).lY(s)},
@@ -41910,11 +41910,16 @@ A.a14.prototype={
 $1(a){return B.a6u},
 $S:291}
 A.a1a.prototype={
-$2(a,b){var s,r=null,q=b.b>600,p=q?3:1,o=q?1.4:3.6,n=this.a,m=A.V(n).h("a2<1,rg>")
-m=A.a1(new A.a2(n,new A.a13(),m),!0,m.h("ar.E"))
-n=A.as([null,0],t.LO,t.S)
-s=m.length
-return new A.pE(new A.Ok(p,16,16,o),new A.agC(!0,!0,!0,m,n),B.qa,B.bT,!1,r,r,B.j6,!1,r,s,B.aq,B.mm,r,B.ap,B.ak,r)},
+$2(a,b){var s,r,q,p,o=null,n=b.b
+if(n>900)s=3
+else s=n>450?2:1
+n=n>600?1.4:1
+r=this.a
+q=A.V(r).h("a2<1,rg>")
+q=A.a1(new A.a2(r,new A.a13(),q),!0,q.h("ar.E"))
+r=A.as([null,0],t.LO,t.S)
+p=q.length
+return new A.pE(new A.Ok(s,16,16,n),new A.agC(!0,!0,!0,q,r),B.qa,B.bT,!1,o,o,B.j6,!1,o,p,B.aq,B.mm,o,B.ap,B.ak,o)},
 $S:162}
 A.a13.prototype={
 $1(a){return new A.rg(a,null)},
