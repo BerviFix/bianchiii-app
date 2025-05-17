@@ -40,9 +40,13 @@ class DashboardScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Image.asset(
-          'assets/bianchiii-logo.png',
-          height: 50, // Regola l'altezza in base alle tue esigenze
+        toolbarHeight: 80,
+        title: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16.0),
+          child: Image.asset(
+            'assets/bianchiii-logo.png',
+            height: 50,
+          ),
         ),
         centerTitle: true, // Opzionale: centra il logo
       ),

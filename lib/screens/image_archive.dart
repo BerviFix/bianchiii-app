@@ -1,43 +1,72 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 
 class ImageArchive extends StatelessWidget {
   const ImageArchive({super.key});
 
-  static const List<String> _imageUrls = [
-    'https://images.unsplash.com/photo-1518779578993-ec3579fee39f',
-    'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d',
-    'https://images.unsplash.com/photo-1495560778119-ff83415a74be',
-    'https://images.unsplash.com/photo-1481349518771-20055b2a7b24',
-    'https://images.unsplash.com/photo-1472214103451-9374bd1c798e',
-    'https://images.unsplash.com/photo-1432958576631-279bf4740dbf',
-    'https://images.unsplash.com/photo-1437992353603-3a8c36ef9d62',
-    'https://images.unsplash.com/photo-1443890923422-7819ed4101c0',
-  ];
+  static const _gql = r'''
+    query ImagesMedia {
+      assets(
+        kind: "image"
+        orderBy: "filename ASC"
+      ) {
+        url
+        filename
+      }
+    }
+  ''';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Archivio Immagini')),
-      body: GridView.builder(
-        padding: const EdgeInsets.all(8),
-        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: 200,
-          mainAxisSpacing: 8,
-          crossAxisSpacing: 8,
-        ),
-        itemCount: _imageUrls.length,
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => _ImageViewer(initialIndex: index)),
+      body: Query(
+        options: QueryOptions(document: gql(_gql)),
+        builder: (result, {fetchMore, refetch}) {
+          if (result.isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (result.hasException) {
+            return Center(child: Text('Errore: ${result.exception}'));
+          }
+
+          final assets = result.data!['assets'] as List<dynamic>;
+
+          return GridView.builder(
+            padding: const EdgeInsets.all(8),
+            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 200,
+              mainAxisSpacing: 8,
+              crossAxisSpacing: 8,
             ),
-            child: Hero(
-              tag: 'image_$index',
-              child: CachedNetworkImage(imageUrl: _imageUrls[index], fit: BoxFit.cover),
-            ),
+            itemCount: assets.length,
+            itemBuilder: (context, index) {
+              final asset = assets[index];
+              final url = asset['url'] as String;
+
+              return GestureDetector(
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => _ImageViewer(
+                    assets: assets,
+                    initialIndex: index
+                  )),
+                ),
+                child: Hero(
+                  tag: 'image_$index',
+                  child: CachedNetworkImage(
+                    imageUrl: url,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                    errorWidget: (context, url, error) => const Icon(Icons.error),
+                  ),
+                ),
+              );
+            },
           );
         },
       ),
@@ -46,7 +75,8 @@ class ImageArchive extends StatelessWidget {
 }
 
 class _ImageViewer extends StatefulWidget {
-  const _ImageViewer({required this.initialIndex});
+  const _ImageViewer({required this.assets, required this.initialIndex});
+  final List<dynamic> assets;
   final int initialIndex;
 
   @override
@@ -70,9 +100,11 @@ class __ImageViewerState extends State<_ImageViewer> {
         children: [
           PageView.builder(
             controller: _controller,
-            itemCount: ImageArchive._imageUrls.length,
+            itemCount: widget.assets.length,
             itemBuilder: (context, index) {
-              final url = ImageArchive._imageUrls[index];
+              final asset = widget.assets[index];
+              final url = asset['url'] as String;
+
               return Hero(
                 tag: 'image_$index',
                 child: PhotoView(imageProvider: CachedNetworkImageProvider(url)),

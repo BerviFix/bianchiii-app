@@ -87,7 +87,6 @@ class _AudioArchiveState extends State<AudioArchive> {
               return Card(
                 child: ListTile(
                   title: Text(filename),
-                  subtitle: Text(url),
                   trailing: StreamBuilder<PlayerState>(
                     stream: _player.playerStateStream,
                     builder: (_, snap) {
