@@ -30,7 +30,7 @@ class MediaDashboardApp extends StatelessWidget {
     return GraphQLProvider(
       client: client,
       child: MaterialApp(
-        title: 'Media Dashboard',
+        title: 'Bianchiii',
         debugShowCheckedModeBanner: false,
         theme: FlexThemeData.dark(
           scheme: FlexScheme.outerSpace,
