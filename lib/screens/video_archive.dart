@@ -187,7 +187,7 @@ class __VideoPlayerScreenState extends State<_VideoPlayerScreen> {
           ),
           Positioned(
             top: MediaQuery.of(context).padding.top + 8,
-            left: 8,
+            right: 8,
             child: IconButton(
               icon: const Icon(Icons.close, color: Colors.white),
               onPressed: () => Navigator.pop(context),
