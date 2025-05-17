@@ -42374,7 +42374,7 @@ return b instanceof A.Hv&&this.a===b.a},
 gt(a){return B.f.gt(this.a)}}
 A.Jd.prototype={
 J(a){var s=null,r=A.a([new A.ol("Audio",B.Sv,B.X7,new A.a1V(a)),new A.ol("Immagini",B.Su,B.X8,new A.a1W(a)),new A.ol("Video",B.qu,B.X6,new A.a1X(a))],t.p5)
-return A.C3(A.ZK(!0,new A.q4(A.aE1(s,s,new A.xS("bianchiii-logo.png",s,s)),s,s,s,s,50,s,B.e1,s,s,B.a6,B.cp,!1,!1,s,s)),s,new A.Ag(new A.a1Y(r),s))}}
+return A.C3(A.ZK(!0,new A.q4(A.aE1(s,s,new A.xS("assets/bianchiii-logo.png",s,s)),s,s,s,s,50,s,B.e1,s,s,B.a6,B.cp,!1,!1,s,s)),s,new A.Ag(new A.a1Y(r),s))}}
 A.a1V.prototype={
 $0(){var s=A.Ay(new A.a1U(),null,t.z)
 return A.lB(this.a).lT(s)},
@@ -42412,7 +42412,7 @@ J(a){var s=null,r=this.c,q=r.c,p=t.O
 return A.axz(!1,A.Ia(24),!0,A.aB8(A.o6(B.cd,A.a([A.pr(s,s,new A.fk(s,s,s,s,s,new A.uy(B.Db,B.D9,B.eI,A.a([A.dA(B.d.al(178.5),q.aj()>>>16&255,q.aj()>>>8&255,q.aj()&255),A.dA(B.d.al(76.5),q.aj()>>>16&255,q.aj()>>>8&255,q.aj()&255)],t.t_),s,s),B.be),s,s,s,s),A.mY(A.aBn(A.a([A.KX(r.b,s,s,64),B.BV,A.aj8(r.a,A.aS(a).p1.r)],p),B.cY,B.lN),s,s)],p),B.eF)),s,!0,s,s,s,s,s,s,s,s,s,r.d,s,s,s,s)}}
 A.LQ.prototype={
 J(a){var s=null
-return new A.zF(this.c,new A.Av(B.MF,"Media Dashboard",A.aO6(s,s,s,s,!0,0,s,s,s,s,!1,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,B.qh,s,s,s,s,B.Sh,s,s,s,!1,!1,s,s,s,s,s,s,!1,!0,s,!0,!1,6,s,s).gamp(),B.C8,!1,s),s)}}
+return new A.zF(this.c,new A.Av(B.MF,"Bianchiii",A.aO6(s,s,s,s,!0,0,s,s,s,s,!1,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,B.qh,s,s,s,s,B.Sh,s,s,s,!1,!1,s,s,s,s,s,s,!1,!0,s,!0,!1,6,s,s).gamp(),B.C8,!1,s),s)}}
 A.pa.prototype={
 ae(){return new A.Qz(A.aMe())}}
 A.Qz.prototype={
