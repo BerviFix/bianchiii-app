@@ -8,7 +8,13 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initHiveForFlutter();
 
-  final httpLink = HttpLink('https://cmsbianchiii.dev.bervifix.com/api');
+  final httpLink = HttpLink(
+    'https://cmsbianchiii.dev.bervifix.com/api',
+    defaultHeaders: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+  );
 
   final ValueNotifier<GraphQLClient> client = ValueNotifier(
     GraphQLClient(
