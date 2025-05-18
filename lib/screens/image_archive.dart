@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:flutter/services.dart';
 
+import '../widgets/app_header.dart';
+
 class ImageArchive extends StatelessWidget {
   const ImageArchive({super.key});
 
@@ -27,7 +29,7 @@ class ImageArchive extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Archivio Immagini')),
+      appBar: AppHeader(),
       body: GridView.builder(
         padding: const EdgeInsets.all(8),
         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(

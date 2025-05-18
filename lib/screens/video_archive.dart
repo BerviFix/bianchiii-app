@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
+import '../widgets/app_header.dart';
+
 class VideoArchive extends StatelessWidget {
   const VideoArchive({super.key});
 
@@ -18,7 +20,7 @@ class VideoArchive extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Archivio Video')),
+      appBar: AppHeader(),
       body: LayoutBuilder(
         builder: (context, constraints) {
           // Determina il numero di colonne in base alla larghezza

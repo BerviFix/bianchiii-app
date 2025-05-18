@@ -1,6 +1,7 @@
 import 'package:bianchiii/screens/audio_archive.dart';
 import 'package:bianchiii/screens/image_archive.dart';
 import 'package:bianchiii/screens/video_archive.dart';
+import 'package:bianchiii/widgets/app_header.dart';
 import 'package:flutter/material.dart';
 
 class DashboardScreen extends StatelessWidget {
@@ -39,17 +40,7 @@ class DashboardScreen extends StatelessWidget {
     ];
 
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 80,
-        title: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16.0),
-          child: Image.asset(
-            'assets/bianchiii-logo.png',
-            height: 70,
-          ),
-        ),
-        centerTitle: true, // Opzionale: centra il logo
-      ),
+      appBar: AppHeader(),
       body: LayoutBuilder(
         builder: (context, constraints) {
           final isWide = constraints.maxWidth > 600;

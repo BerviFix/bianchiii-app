@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:just_audio/just_audio.dart';
 
+import '../widgets/app_header.dart';
+
 class AudioArchive extends StatefulWidget {
   const AudioArchive({super.key});
 
@@ -61,7 +63,7 @@ class _AudioArchiveState extends State<AudioArchive> {
     'Questa versione di AudioArchive è pensata soltanto per il Web');
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Archivio Audio')),
+      appBar: AppHeader(),
       body: Query(
         options: QueryOptions(document: gql(_gql)),
         builder: (result, {fetchMore, refetch}) {
