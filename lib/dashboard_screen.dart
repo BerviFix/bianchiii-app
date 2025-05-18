@@ -52,32 +52,6 @@ class DashboardScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Header con titolo principale
-                Container(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 24,
-                      vertical: isMedium ? 40 : 24
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Media Dashboard',
-                        style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Esplora la collezione multimediale di Bianchiii',
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: Colors.grey[400],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
                 // Sezione Audio (con conteggio dinamico da GraphQL)
                 Query(
                   options: QueryOptions(document: gql(_countAudioQuery)),
