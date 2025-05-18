@@ -93,14 +93,14 @@ class _AudioArchiveState extends State<AudioArchive> {
     final theme = Theme.of(context);
 
     return Scaffold(
+      appBar: AppHeader(),
       body: Column(
         children: [
-          // Collapsible header (logo + search bar)
+          // Barra di ricerca collassabile
           AnimatedContainer(
             duration: const Duration(milliseconds: 250),
             curve: Curves.easeInOut,
-            height: _showHeader ? 150 : 0,
-            // Clip to avoid overflow when collapsing
+            height: _showHeader ? 70 : 0,
             clipBehavior: Clip.hardEdge,
             decoration: BoxDecoration(
               color: theme.colorScheme.surface,
@@ -116,65 +116,48 @@ class _AudioArchiveState extends State<AudioArchive> {
             ),
             child: Offstage(
               offstage: !_showHeader,
-              child: Column(
-                children: [
-                  // Logo / title
-                  SizedBox(
-                    height: 80,
-                    child: Center(
-                      child: Image.asset(
-                        'assets/bianchiii-logo.png',
-                        height: 60,
+              child: Container(
+                height: 70,
+                alignment: Alignment.center,
+                child: Container(
+                  margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                  constraints: const BoxConstraints(maxWidth: 600),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surfaceVariant.withOpacity(0.9),
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.deepPurpleAccent.withOpacity(0.2),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
                       ),
+                    ],
+                    border: Border.all(
+                      color: Colors.deepPurpleAccent.withOpacity(0.3),
+                      width: 1.5,
                     ),
                   ),
-// Search bar
-                  Container(
-                    height: 70,
-                    alignment: Alignment.center,
-                    child: Container(
-                      margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                      constraints: const BoxConstraints(maxWidth: 600), // Limite massimo di larghezza
-                      decoration: BoxDecoration(
-                        color: theme.colorScheme.surfaceVariant.withOpacity(0.9),
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.deepPurpleAccent.withOpacity(0.2),
-                            blurRadius: 8,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                        border: Border.all(
-                          color: Colors.deepPurpleAccent.withOpacity(0.3),
-                          width: 1.5,
-                        ),
-                      ),
-                      child: TextField(
-                        onChanged: (value) => setState(() => _searchQuery = value),
-                        style: TextStyle(color: theme.colorScheme.onSurface),
-                        decoration: InputDecoration(
-                          hintText: 'Cerca file audio...',
-                          hintStyle: TextStyle(color: theme.colorScheme.onSurface.withOpacity(0.6)),
-                          prefixIcon: Icon(Icons.search, color: Colors.deepPurpleAccent),
-                          suffixIcon: _searchQuery.isNotEmpty
-                              ? IconButton(
-                            icon: Icon(Icons.clear, color: theme.colorScheme.onSurface),
-                            onPressed: () => setState(() => _searchQuery = ''),
-                          )
-                              : null,
-                          border: InputBorder.none,
-                          contentPadding: const EdgeInsets.symmetric(vertical: 15),
-                        ),
-                      ),
+                  child: TextField(
+                    onChanged: (value) => setState(() => _searchQuery = value),
+                    style: TextStyle(color: theme.colorScheme.onSurface),
+                    decoration: InputDecoration(
+                      hintText: 'Cerca file audio...',
+                      hintStyle: TextStyle(color: theme.colorScheme.onSurface.withOpacity(0.6)),
+                      prefixIcon: Icon(Icons.search, color: Colors.deepPurpleAccent),
+                      suffixIcon: _searchQuery.isNotEmpty
+                          ? IconButton(
+                        icon: Icon(Icons.clear, color: theme.colorScheme.onSurface),
+                        onPressed: () => setState(() => _searchQuery = ''),
+                      )
+                          : null,
+                      border: InputBorder.none,
+                      contentPadding: const EdgeInsets.symmetric(vertical: 15),
                     ),
-                  )
-                ],
+                  ),
+                ),
               ),
             ),
           ),
-
-          // Audio list
           Expanded(
             child: Query(
               options: QueryOptions(document: gql(_gql)),
