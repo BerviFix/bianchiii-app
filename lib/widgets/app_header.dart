@@ -8,7 +8,7 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget
   Widget build(BuildContext context)
   {
     return AppBar
-      (
+    (
       toolbarHeight: 80,
       title: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -17,7 +17,8 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget
           height: 60,
         ),
       ),
-      centerTitle: true, // Opzionale: centra il logo
+      centerTitle: true,
+      backgroundColor: Colors.black,
     );
   }
 
