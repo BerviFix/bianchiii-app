@@ -26,6 +26,8 @@ class ImageArchive extends StatelessWidget {
     'assets/photos/img-15.jpg',
   ];
 
+  static int get assetCount => _assetImages.length;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

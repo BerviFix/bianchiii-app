@@ -17,6 +17,8 @@ class VideoArchive extends StatelessWidget {
     'assets/video/video-7.mp4',
   ];
 
+  static int get assetCount => _assetVideos.length;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
