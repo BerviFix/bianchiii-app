@@ -1,12 +1,19 @@
+import 'package:bianchiii/password_gate_page.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'dashboard_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initHiveForFlutter();
+
+  await Supabase.initialize(
+    url: 'https://okcqwyiafynzlapeonli.supabase.co',
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rY3F3eWlhZnluemxhcGVvbmxpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc2NTEwMTAsImV4cCI6MjA2MzIyNzAxMH0.V3jruGFKWJTovvvyMerXJra4LjIfRxDb4His8KfMByU',
+  );
 
   final httpLink = HttpLink(
     'https://cmsbianchiii.dev.bervifix.com/api',
@@ -47,7 +54,9 @@ class MediaDashboardApp extends StatelessWidget {
           ),
         ),
         themeMode: ThemeMode.dark,
-        home: const DashboardScreen(),
+        home: PasswordGatePage(
+          child: const DashboardScreen(),
+        ),
       ),
     );
   }
