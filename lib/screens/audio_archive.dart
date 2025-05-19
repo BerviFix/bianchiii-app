@@ -93,6 +93,7 @@ class _AudioArchiveState extends State<AudioArchive> {
     final theme = Theme.of(context);
 
     return Scaffold(
+      backgroundColor:  Colors.black,
       appBar: AppHeader(),
       body: Column(
         children: [

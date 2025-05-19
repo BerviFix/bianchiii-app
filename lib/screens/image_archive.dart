@@ -31,6 +31,7 @@ class ImageArchive extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor:  Colors.black,
       appBar: AppHeader(),
       body: GridView.builder(
         padding: const EdgeInsets.all(8),
