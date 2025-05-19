@@ -51,43 +51,20 @@ class _PasswordGatePageState extends State<PasswordGatePage> with SingleTickerPr
   }
 
   Future<void> _initSupabase() async {
-    // Usa l'istanza già inizializzata in main.dart invece di inizializzarla nuovamente
     _supabaseClient = Supabase.instance.client;
-
-    // Controlla se c'è già una sessione attiva
-    final session = _supabaseClient.auth.currentSession;
-    if (session != null) {
-      setState(() {
-        _isAuthenticated = true;
-      });
-    }
   }
 
   Future<void> _checkIfAlreadyAuthenticated() async {
-    final prefs = await SharedPreferences.getInstance();
-    final authTimestamp = prefs.getInt('authTimestamp');
+    // Controlla semplicemente se c'è una sessione valida
+    final session = _supabaseClient.auth.currentSession;
 
-    if (authTimestamp != null) {
-      final lastAuthTime = DateTime.fromMillisecondsSinceEpoch(authTimestamp);
-      final currentTime = DateTime.now();
-
-      // Verifica se è passata meno di un'ora dall'ultima autenticazione
-      final difference = currentTime.difference(lastAuthTime);
-      final isStillValid = difference.inHours < 1;
-
-      if (isStillValid) {
-        setState(() {
-          _isAuthenticated = true;
-        });
-      } else {
-        // È passata più di un'ora, elimina il timestamp e la sessione
-        await prefs.remove('authTimestamp');
-        await _supabaseClient.auth.signOut();
-        Future.delayed(const Duration(milliseconds: 300), () {
-          _focusNode.requestFocus();
-        });
-      }
+    if (session != null) {
+      // Se esiste una sessione, l'utente è autenticato
+      setState(() {
+        _isAuthenticated = true;
+      });
     } else {
+      // Nessuna sessione attiva, richiedi la password
       Future.delayed(const Duration(milliseconds: 300), () {
         _focusNode.requestFocus();
       });
@@ -106,9 +83,6 @@ class _PasswordGatePageState extends State<PasswordGatePage> with SingleTickerPr
 
       if (response.user != null) {
         // Autenticazione riuscita
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setInt('authTimestamp', DateTime.now().millisecondsSinceEpoch);
-
         setState(() {
           _isError = false;
           _isLoading = false;
