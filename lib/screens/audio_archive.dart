@@ -119,39 +119,47 @@ class _AudioArchiveState extends State<AudioArchive> {
               child: Container(
                 height: 70,
                 alignment: Alignment.center,
-                child: Container(
-                  margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                  constraints: const BoxConstraints(maxWidth: 600),
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.surfaceVariant.withOpacity(0.9),
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.deepPurpleAccent.withOpacity(0.2),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                ),
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 1200),
+                    child: Container(
+                      margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                      constraints: const BoxConstraints(maxWidth: 600),
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.surfaceVariant.withOpacity(0.9),
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.deepPurpleAccent.withOpacity(0.2),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                        border: Border.all(
+                          color: Colors.deepPurpleAccent.withOpacity(0.3),
+                          width: 1.5,
+                        ),
                       ),
-                    ],
-                    border: Border.all(
-                      color: Colors.deepPurpleAccent.withOpacity(0.3),
-                      width: 1.5,
-                    ),
-                  ),
-                  child: TextField(
-                    onChanged: (value) => setState(() => _searchQuery = value),
-                    style: TextStyle(color: theme.colorScheme.onSurface),
-                    decoration: InputDecoration(
-                      hintText: 'Cerca file audio...',
-                      hintStyle: TextStyle(color: theme.colorScheme.onSurface.withOpacity(0.6)),
-                      prefixIcon: Icon(Icons.search, color: Colors.deepPurpleAccent),
-                      suffixIcon: _searchQuery.isNotEmpty
-                          ? IconButton(
-                        icon: Icon(Icons.clear, color: theme.colorScheme.onSurface),
-                        onPressed: () => setState(() => _searchQuery = ''),
-                      )
-                          : null,
-                      border: InputBorder.none,
-                      contentPadding: const EdgeInsets.symmetric(vertical: 15),
+                      child: TextField(
+                        onChanged: (value) => setState(() => _searchQuery = value),
+                        style: TextStyle(color: theme.colorScheme.onSurface),
+                        decoration: InputDecoration(
+                          hintText: 'Cerca file audio...',
+                          hintStyle: TextStyle(color: theme.colorScheme.onSurface.withOpacity(0.6)),
+                          prefixIcon: Icon(Icons.search, color: Colors.deepPurpleAccent),
+                          suffixIcon: _searchQuery.isNotEmpty
+                              ? IconButton(
+                            icon: Icon(Icons.clear, color: theme.colorScheme.onSurface),
+                            onPressed: () => setState(() => _searchQuery = ''),
+                          )
+                              : null,
+                          border: InputBorder.none,
+                          contentPadding: const EdgeInsets.symmetric(vertical: 15),
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -202,98 +210,103 @@ class _AudioArchiveState extends State<AudioArchive> {
                   );
                 }
 
-                return ListView.separated(
-                  controller: _scrollController,
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  itemCount: filteredAssets.length,
-                  separatorBuilder: (_, __) => const SizedBox(height: 8),
-                  itemBuilder: (context, i) {
-                    final asset = filteredAssets[i];
-                    final url = asset['url'] as String;
-                    final filename = asset['filename'] as String;
-                    final isCurrent = _currentUrl == url;
+                return Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 1200),
+                    child: ListView.separated(
+                      controller: _scrollController,
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      itemCount: filteredAssets.length,
+                      separatorBuilder: (_, __) => const SizedBox(height: 8),
+                      itemBuilder: (context, i) {
+                        final asset = filteredAssets[i];
+                        final url = asset['url'] as String;
+                        final filename = asset['filename'] as String;
+                        final isCurrent = _currentUrl == url;
 
-                    return Card(
-                      elevation: 2,
-                      shadowColor: Colors.deepPurpleAccent.withOpacity(0.3),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                        side: isCurrent
-                            ? BorderSide(
-                          color: Colors.deepPurpleAccent,
-                          width: 2,
-                        )
-                            : BorderSide.none,
-                      ),
-                      child: ListTile(
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        title: Text(
-                          filename,
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            fontWeight: isCurrent ? FontWeight.bold : FontWeight.normal,
+                        return Card(
+                          elevation: 2,
+                          shadowColor: Colors.deepPurpleAccent.withOpacity(0.3),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            side: isCurrent
+                                ? BorderSide(
+                              color: Colors.deepPurpleAccent,
+                              width: 2,
+                            )
+                                : BorderSide.none,
                           ),
-                        ),
-                        leading: Container(
-                          width: 48,
-                          height: 48,
-                          decoration: BoxDecoration(
-                            color: Colors.deepPurpleAccent.withOpacity(0.2),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Icon(
-                            Icons.audiotrack_rounded,
-                            color: Colors.deepPurpleAccent,
-                          ),
-                        ),
-                        trailing: StreamBuilder<PlayerState>(
-                          stream: _player.playerStateStream,
-                          builder: (_, snap) {
-                            final playing = snap.data?.playing ?? false;
-                            final isCurrentTrack = _currentUrl == url;
-
-                            return Container(
+                          child: ListTile(
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                            title: Text(
+                              filename,
+                              style: theme.textTheme.titleMedium?.copyWith(
+                                fontWeight: isCurrent ? FontWeight.bold : FontWeight.normal,
+                              ),
+                            ),
+                            leading: Container(
                               width: 48,
                               height: 48,
                               decoration: BoxDecoration(
-                                color: isCurrentTrack && playing
-                                    ? Colors.deepPurpleAccent
-                                    : theme.colorScheme.surface,
+                                color: Colors.deepPurpleAccent.withOpacity(0.2),
                                 borderRadius: BorderRadius.circular(12),
-                                border: Border.all(
-                                  color: Colors.deepPurpleAccent.withOpacity(0.5),
-                                  width: 1,
-                                ),
                               ),
-                              child: IconButton(
-                                icon: Icon(
-                                  isCurrentTrack && playing ? Icons.pause : Icons.play_arrow,
-                                  color: isCurrentTrack && playing
-                                      ? theme.colorScheme.onPrimary
-                                      : Colors.deepPurpleAccent,
-                                ),
-                                onPressed: () async {
-                                  if (!isCurrentTrack) {
-                                    setState(() => _currentUrl = url);
-                                    await _player.stop();
-                                    await _player.setAudioSource(AudioSource.uri(Uri.parse(url)));
-                                    await _player.play();
-                                    return;
-                                  }
+                              child: Icon(
+                                Icons.audiotrack_rounded,
+                                color: Colors.deepPurpleAccent,
+                              ),
+                            ),
+                            trailing: StreamBuilder<PlayerState>(
+                              stream: _player.playerStateStream,
+                              builder: (_, snap) {
+                                final playing = snap.data?.playing ?? false;
+                                final isCurrentTrack = _currentUrl == url;
 
-                                  if (playing) {
-                                    await _player.pause();
-                                  } else {
-                                    await _player.play();
-                                  }
-                                  setState(() {});
-                                },
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    );
-                  },
+                                return Container(
+                                  width: 48,
+                                  height: 48,
+                                  decoration: BoxDecoration(
+                                    color: isCurrentTrack && playing
+                                        ? Colors.deepPurpleAccent
+                                        : theme.colorScheme.surface,
+                                    borderRadius: BorderRadius.circular(12),
+                                    border: Border.all(
+                                      color: Colors.deepPurpleAccent.withOpacity(0.5),
+                                      width: 1,
+                                    ),
+                                  ),
+                                  child: IconButton(
+                                    icon: Icon(
+                                      isCurrentTrack && playing ? Icons.pause : Icons.play_arrow,
+                                      color: isCurrentTrack && playing
+                                          ? theme.colorScheme.onPrimary
+                                          : Colors.deepPurpleAccent,
+                                    ),
+                                    onPressed: () async {
+                                      if (!isCurrentTrack) {
+                                        setState(() => _currentUrl = url);
+                                        await _player.stop();
+                                        await _player.setAudioSource(AudioSource.uri(Uri.parse(url)));
+                                        await _player.play();
+                                        return;
+                                      }
+
+                                      if (playing) {
+                                        await _player.pause();
+                                      } else {
+                                        await _player.play();
+                                      }
+                                      setState(() {});
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                 );
               },
             ),

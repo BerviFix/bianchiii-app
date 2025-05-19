@@ -138,19 +138,24 @@ class _MediaSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(24),
-        child: Card(
-          elevation: 4,
-          shadowColor: color.withOpacity(0.3),
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            child: isWide
-                ? _buildWideLayout(context)
-                : _buildNarrowLayout(context),
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 1200),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(24),
+            child: Card(
+              elevation: 4,
+              shadowColor: color.withOpacity(0.3),
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                child: isWide
+                    ? _buildWideLayout(context)
+                    : _buildNarrowLayout(context),
+              ),
+            ),
           ),
         ),
       ),

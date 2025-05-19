@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class AppHeader extends StatelessWidget implements PreferredSizeWidget
 {
@@ -19,6 +20,7 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget
       ),
       centerTitle: true,
       backgroundColor: Colors.black,
+      surfaceTintColor: Colors.black,
     );
   }
 
