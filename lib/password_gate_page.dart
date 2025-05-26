@@ -1,6 +1,8 @@
+import 'dart:async'; // Aggiungi questo import
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+//shared_preferences non è usato direttamente qui, ma Supabase potrebbe usarlo internamente
+//import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class PasswordGatePage extends StatefulWidget {
@@ -27,6 +29,7 @@ class _PasswordGatePageState extends State<PasswordGatePage> with SingleTickerPr
 
   // Cliente Supabase
   late final SupabaseClient _supabaseClient;
+  Timer? _logoutTimer; // Timer per il logout automatico
 
   @override
   void initState() {
@@ -55,58 +58,70 @@ class _PasswordGatePageState extends State<PasswordGatePage> with SingleTickerPr
   }
 
   Future<void> _checkIfAlreadyAuthenticated() async {
-    // Controlla semplicemente se c'è una sessione valida
     final session = _supabaseClient.auth.currentSession;
 
     if (session != null) {
       // Se esiste una sessione, l'utente è autenticato
+      // Avvia il timer anche se l'utente era già autenticato
+      // per garantire il logout dopo un'ora dall'apertura dell'app
+      // se la sessione è ancora valida.
+      // Considera la scadenza del token originale per una logica più precisa.
+      // Per semplicità, qui riavviamo un timer di un'ora.
+      _startLogoutTimer();
       setState(() {
         _isAuthenticated = true;
       });
     } else {
-      // Nessuna sessione attiva, richiedi la password
       Future.delayed(const Duration(milliseconds: 300), () {
         _focusNode.requestFocus();
       });
     }
   }
 
+  void _startLogoutTimer() {
+    _logoutTimer?.cancel(); // Cancella timer precedenti se esistono
+    _logoutTimer = Timer(const Duration(hours: 1), () {
+      if (mounted) {
+        _supabaseClient.auth.signOut();
+        setState(() {
+          _isAuthenticated = false;
+          // Potresti voler mostrare un messaggio o reindirizzare
+        });
+      }
+    });
+  }
+
   Future<void> _authenticate() async {
     setState(() => _isLoading = true);
 
     try {
-      // Tenta il login con Supabase usando l'email predefinita e la password inserita
       final response = await _supabaseClient.auth.signInWithPassword(
         email: _email,
         password: _passwordController.text,
       );
 
       if (response.user != null) {
-        // Autenticazione riuscita
         setState(() {
           _isError = false;
           _isLoading = false;
         });
 
-        // Animazione di fade out
+        _startLogoutTimer(); // Avvia il timer per il logout automatico
+
         await _animationController.reverse();
 
         setState(() {
           _isAuthenticated = true;
         });
       } else {
-        // Non dovremmo mai arrivare qui se l'autenticazione ha successo
         throw Exception('Autenticazione fallita');
       }
     } catch (e) {
-      // Errore di autenticazione
       HapticFeedback.mediumImpact();
       setState(() {
         _isError = true;
         _isLoading = false;
       });
-
-      // Animazione di errore (shake)
       _shakeAnimation();
     }
   }
@@ -117,10 +132,17 @@ class _PasswordGatePageState extends State<PasswordGatePage> with SingleTickerPr
 
     for (int i = 0; i < count; i++) {
       await Future.delayed(duration, () {
-        setState(() {
+        // Non è necessario fare setState qui se l'animazione è gestita
+        // da un AnimationController o se non cambia lo stato visivo
+        // che dipende da `build`. Lo shake qui sembra essere un effetto
+        // visivo temporaneo non legato allo stato persistente.
+        // Se lo shake è un'animazione del TextField stesso,
+        // questa logica potrebbe essere rivista.
+        // Per ora, la selezione del testo è mantenuta.
+        if (mounted) {
           _passwordController.selection = TextSelection.fromPosition(
               TextPosition(offset: _passwordController.text.length));
-        });
+        }
       });
     }
   }
@@ -299,6 +321,7 @@ class _PasswordGatePageState extends State<PasswordGatePage> with SingleTickerPr
     _passwordController.dispose();
     _focusNode.dispose();
     _animationController.dispose();
+    _logoutTimer?.cancel(); // Assicurati di cancellare il timer nel dispose
     super.dispose();
   }
 }
