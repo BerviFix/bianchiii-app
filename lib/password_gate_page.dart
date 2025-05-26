@@ -1,8 +1,7 @@
-import 'dart:async'; // Aggiungi questo import
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-//shared_preferences non è usato direttamente qui, ma Supabase potrebbe usarlo internamente
-//import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart'; // Importa shared_preferences
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class PasswordGatePage extends StatefulWidget {
@@ -24,12 +23,12 @@ class _PasswordGatePageState extends State<PasswordGatePage> with SingleTickerPr
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
 
-  // Email predefinita per l'autenticazione
   final String _email = 'simone.bervi@gmail.com';
-
-  // Cliente Supabase
   late final SupabaseClient _supabaseClient;
-  Timer? _logoutTimer; // Timer per il logout automatico
+
+  // Chiave per SharedPreferences
+  static const String _loginTimestampKey = 'login_timestamp_millis';
+  final Duration _sessionTimeoutDuration = const Duration(hours: 1);
 
   @override
   void initState() {
@@ -49,7 +48,7 @@ class _PasswordGatePageState extends State<PasswordGatePage> with SingleTickerPr
       CurvedAnimation(parent: _animationController, curve: Curves.easeOutCubic),
     );
 
-    _checkIfAlreadyAuthenticated();
+    _checkSessionAndTimestamp(); // Modificato da _checkIfAlreadyAuthenticated
     _animationController.forward();
   }
 
@@ -57,42 +56,37 @@ class _PasswordGatePageState extends State<PasswordGatePage> with SingleTickerPr
     _supabaseClient = Supabase.instance.client;
   }
 
-  Future<void> _checkIfAlreadyAuthenticated() async {
+  Future<void> _checkSessionAndTimestamp() async {
+    final prefs = await SharedPreferences.getInstance();
     final session = _supabaseClient.auth.currentSession;
+    final loginTimestampMillis = prefs.getInt(_loginTimestampKey);
 
     if (session != null) {
-      // Se esiste una sessione, l'utente è autenticato
-      // Avvia il timer anche se l'utente era già autenticato
-      // per garantire il logout dopo un'ora dall'apertura dell'app
-      // se la sessione è ancora valida.
-      // Considera la scadenza del token originale per una logica più precisa.
-      // Per semplicità, qui riavviamo un timer di un'ora.
-      _startLogoutTimer();
-      setState(() {
-        _isAuthenticated = true;
-      });
-    } else {
-      Future.delayed(const Duration(milliseconds: 300), () {
-        _focusNode.requestFocus();
-      });
-    }
-  }
-
-  void _startLogoutTimer() {
-    _logoutTimer?.cancel(); // Cancella timer precedenti se esistono
-    _logoutTimer = Timer(const Duration(hours: 1), () {
-      if (mounted) {
-        _supabaseClient.auth.signOut();
-        setState(() {
-          _isAuthenticated = false;
-          // Potresti voler mostrare un messaggio o reindirizzare
-        });
+      // L'utente ha una sessione Supabase attiva
+      if (loginTimestampMillis != null) {
+        final nowMillis = DateTime.now().millisecondsSinceEpoch;
+        if (nowMillis - loginTimestampMillis >= _sessionTimeoutDuration.inMilliseconds) {
+          // Sessione scaduta in base al nostro timestamp
+          await _performLogout(prefs);
+        } else {
+          // Sessione ancora valida
+          setState(() => _isAuthenticated = true);
+        }
+      } else {
+        // Sessione Supabase esiste, ma non c'è il nostro timestamp (es. primo login o login precedente)
+        // Salviamo il timestamp ora, assumendo che la sessione sia appena iniziata o valida.
+        await prefs.setInt(_loginTimestampKey, DateTime.now().millisecondsSinceEpoch);
+        setState(() => _isAuthenticated = true);
       }
-    });
+    } else {
+      // Nessuna sessione Supabase, quindi l'utente non è autenticato
+      await _performLogout(prefs); // Assicura che il timestamp sia pulito
+    }
   }
 
   Future<void> _authenticate() async {
     setState(() => _isLoading = true);
+    final prefs = await SharedPreferences.getInstance();
 
     try {
       final response = await _supabaseClient.auth.signInWithPassword(
@@ -101,18 +95,14 @@ class _PasswordGatePageState extends State<PasswordGatePage> with SingleTickerPr
       );
 
       if (response.user != null) {
+        // Login riuscito: salva il timestamp corrente
+        await prefs.setInt(_loginTimestampKey, DateTime.now().millisecondsSinceEpoch);
         setState(() {
           _isError = false;
           _isLoading = false;
-        });
-
-        _startLogoutTimer(); // Avvia il timer per il logout automatico
-
-        await _animationController.reverse();
-
-        setState(() {
           _isAuthenticated = true;
         });
+        await _animationController.reverse();
       } else {
         throw Exception('Autenticazione fallita');
       }
@@ -122,7 +112,24 @@ class _PasswordGatePageState extends State<PasswordGatePage> with SingleTickerPr
         _isError = true;
         _isLoading = false;
       });
+      // In caso di errore di autenticazione, è buona norma rimuovere un eventuale timestamp vecchio
+      await prefs.remove(_loginTimestampKey);
       _shakeAnimation();
+    }
+  }
+
+  Future<void> _performLogout(SharedPreferences prefs) async {
+    await _supabaseClient.auth.signOut();
+    await prefs.remove(_loginTimestampKey); // Rimuovi il timestamp al logout
+    if (mounted) {
+      setState(() {
+        _isAuthenticated = false;
+        _passwordController.clear(); // Opzionale: pulisci la password
+      });
+      // Ritarda il focus per dare tempo alla UI di aggiornarsi se necessario
+      Future.delayed(const Duration(milliseconds: 100), () {
+        if (mounted) _focusNode.requestFocus();
+      });
     }
   }
 
@@ -321,7 +328,6 @@ class _PasswordGatePageState extends State<PasswordGatePage> with SingleTickerPr
     _passwordController.dispose();
     _focusNode.dispose();
     _animationController.dispose();
-    _logoutTimer?.cancel(); // Assicurati di cancellare il timer nel dispose
     super.dispose();
   }
 }
